@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Criptografía Ejemplos Codigos de Profe</title>
+    <link rel="stylesheet" href="CodigosJava.css">
+   
+</head>
+
+<body>
+<div class="code-container">
+
+<pre>
+<code>
+<h1>CRIPTOGRAFÍA Parte 1</h1>  <!-- EJEMPLO 1 -->
+<h2> SymmetricEncryption.java</h2>
+
+    // Importamos las clases necesarias para el cifrado simétrico en Java
+    import javax.crypto.Cipher;// Clase que permite cifrar y descifrar datos
+    import javax.crypto.KeyGenerator; // Clase para generar claves de cifrado simétrico
+    import javax.crypto.SecretKey; // Representa la clave secreta usada en el cifrado
+        
+    public class SymmetricEncryption {
+        public static void main(String[] args) throws Exception {
+
+            // 1. Generación de una clave secreta AES
+            // Creamos un generador de claves para AES
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            // Establecemos la longitud de la clave en 128 bits (puede ser 192 o 256 también)
+            keyGenerator.init(128);
+            SecretKey secretKey = keyGenerator.generateKey(); // Generamos la clave AES
+
+
+            // 2. Creación del objeto Cipher en modo de cifrado
+            // Creamos un objeto Cipher configurado para AES
+            Cipher cipher = Cipher.getInstance("AES");
+            // Inicializamos el cifrador en modo de ENCRIPTACIÓN con la clave generada
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+
+            // 3. Definimos el mensaje que queremos cifrar
+            String message = "Mensaje seguro"; // Texto original que será cifrado
+
+
+            // 4. Ciframos el mensaje
+            // Convertimos el mensaje en bytes y lo ciframos
+            byte[] encryptedMessage = cipher.doFinal(message.getBytes());
+
+
+            // 5. Inicializamos el Cipher en modo de descifrado
+            // Ahora el cifrador se usa para descifrar, utilizando la misma clave
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+
+            // 6. Desciframos el mensaje
+            // Desciframos el mensaje cifrado
+            byte[] decryptedMessage = cipher.doFinal(encryptedMessage);
+
+            
+            // 7. Mostramos los resultados en consola
+            // Mostramos el mensaje original
+            System.out.println("Mensaje original: " + message);
+            // Mostramos el mensaje cifrado (puede no ser legible)
+            System.out.println("Mensaje cifrado: " + new String(encryptedMessage));
+            // Mostramos el mensaje descifrado correctamente
+            System.out.println("Mensaje descifrado: " + new String(decryptedMessage));
+    }
+}
+
+</code>
+</pre>
+
+<hr style="border: 3px solid whitesmoke;"> <!-- ESPACIO -->
+
+<pre>
+<code>
+<h1>CRIPTOGRAFÍA Parte 2</h1> <!-- EJEMPLO 2 -->
+<h2>AESExample.java</h2>
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+    public class AESExample {
+        public static void main(String[] args) throws Exception {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        keyGenerator.init(128);
+        SecretKey secretKey = keyGenerator.generateKey();
+
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+        String mensaje = "Texto secreto";
+        byte[] mensajeCifrado = cipher.doFinal(mensaje.getBytes());
+
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] mensajeDescifrado = cipher.doFinal(mensajeCifrado);
+
+        System.out.println("Mensaje original: " + mensaje);
+        System.out.println("Mensaje cifrado: " + new
+        String(mensajeCifrado));
+        System.out.println("Mensaje descifrado: " + new
+        String(mensajeDescifrado));
+    }
+}
+
+</code>
+</pre>
+
+<pre>
+<code>
+<h2>RSAExample.java</h2>
+// Importamos las clases necesarias para la criptografía en Java
+import javax.crypto.Cipher; // Clase utilizada para realizar cifrado y descifrado
+import java.security.*; // Proporciona clases para la generación y manejo de claves de cifrado
+
+public class RSAExample {
+    public static void main(String[] args) throws Exception {
+
+        // 1. Generación de un par de claves RSA
+        // Creamos un generador de claves para RSA
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        // Configuramos la longitud de la clave en 2048 bits (mayor seguridad)
+        keyGen.initialize(2048);
+        // Generamos el par de claves (pública y privada)
+        KeyPair keyPair = keyGen.generateKeyPair();
+        // 2. Creación del objeto Cipher en modo de cifrado
+        // Creamos un objeto Cipher configurado para RSA
+        Cipher cipher = Cipher.getInstance("RSA");
+        // Inicializamos el cifrador en modo cifrado usando la clave pública
+        cipher.init(Cipher.ENCRYPT_MODE, keyPair.getPublic());
+        // 3. Definimos el mensaje que queremos cifrar
+        // Texto original que será cifrado
+        String mensaje = "Mensaje seguro con RSA";
+        // 4. Ciframos el mensaje con la clave pública
+        // Convertimos el mensaje en bytes y lo ciframos
+        byte[] mensajeCifrado = cipher.doFinal(mensaje.getBytes());
+        // 5. Configuración del Cipher en modo de descifrado
+        // Ahora usamos la clave privada para descifrar
+        cipher.init(Cipher.DECRYPT_MODE, keyPair.getPrivate());
+        // 6. Desciframos el mensaje previamente cifrado
+        // Desciframos el mensaje con la clave privada
+        byte[] mensajeDescifrado = cipher.doFinal(mensajeCifrado);
+        // 7. Mostramos los resultados en consola
+        // Imprimimos el mensaje original
+        System.out.println("Mensaje original: " + mensaje);
+        // Mostramos el mensaje cifrado (puede no ser legible)
+        System.out.println("Mensaje cifrado: " + new String(mensajeCifrado));
+        // Imprimimos el mensaje descifrado
+        System.out.println("Mensaje descifrado: " + new String(mensajeDescifrado));
+    }
+}
+
+</code>
+</pre>
+
+
+<pre>
+<code>
+<h2>SignatureExample.java</h2>
+// Importamos las clases necesarias para la generación de claves y firma digital
+import java.security.KeyPair; // Clase que representa un par de claves (privada y pública)
+import java.security.KeyPairGenerator; // Clase para generar pares de claves
+import java.security.Signature; // Clase para crear y verificar firmas digitales
+
+public class SignatureExample {
+
+    public static void main(String[] args) {
+        try {
+            // 1. Generación del par de claves con el algoritmo DSA (Digital Signature Algorithm)
+            System.out.println("Obteniendo generador de claves con cifrado DSA");
+            // Se obtiene un generador de claves DSA
+            KeyPairGenerator keygen = KeyPairGenerator.getInstance("DSA");
+            System.out.println("Generando par de claves");
+            // Se genera el par de claves (pública y privada)
+            KeyPair keypair = keygen.generateKeyPair();
+
+
+            // 2. Creación del objeto Signature para firmar el mensaje
+            System.out.println("Creando objeto signature");
+            // Se obtiene una instancia del algoritmo DSA para firma digital
+            Signature signature = Signature.getInstance("DSA");
+
+
+            // 3. Firma del mensaje
+            System.out.println("Firmando mensaje");
+            // Se inicializa el objeto Signature con la clave privada para firmar
+            signature.initSign(keypair.getPrivate());
+            // Mensaje que será firmado
+            String mensaje = "Mensaje para firmar";
+            // Se actualiza el objeto Signature con los bytes del mensaje
+            signature.update(mensaje.getBytes());
+            // Se genera la firma digital del mensaje
+            byte[] firma = signature.sign();
+
+
+            // 4. Verificación de la firma digital
+            System.out.println("Comprobando el mensaje firmado");
+
+            // Se inicializa el objeto Signature con la clave pública para verificar la firma
+            signature.initVerify(keypair.getPublic());
+
+            // Se actualiza el objeto Signature con los bytes del mensaje original
+            signature.update(mensaje.getBytes());
+
+            // Se verifica la firma digital comparándola con la clave pública
+            if (signature.verify(firma))
+            // Si la verificación es exitosa, se muestra este mensaje
+            System.out.println("El mensaje es auténtico :-)");
+
+            } catch (Exception e) {
+            // Si ocurre algún error, se imprime la traza de la excepción
+            e.printStackTrace();
+        }
+    }
+}
+
+</code>
+</pre>
+
+<pre>
+<code>
+<h2>RMICalcInterfacer.java</h2>
+
+<!--  -->
+</code>
+</pre>
+
+
+<pre>
+<code>
+<h2>RMICalcServer</h2>
+
+<!--  -->
+</code>
+</pre>
+</div>
+
+</body>
+
+</html>
