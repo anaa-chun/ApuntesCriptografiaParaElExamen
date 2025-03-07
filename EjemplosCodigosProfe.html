@@ -220,22 +220,94 @@ public class SignatureExample {
 </code>
 </pre>
 
+<hr style="border: 3px solid whitesmoke;">
 <pre>
 <code>
-<h2>RMICalcInterfacer.java</h2>
+<h1>CRIPTOGRAFÍA Parte 3</h1>
+<h2>SecureServer.java</h2>
+        // Importamos las clases necesarias para la implementación de un servidor seguro con SSL/TLS
+        import javax.net.ssl.*; // Librerías para la gestión de sockets seguros (SSL/TLS)
+        import java.io.*; // Para manejar la entrada/salida de datos
+        import java.net.*; // Para el manejo de sockets y conexiones de red
 
-<!--  -->
+        public class SecureServer {
+
+        public static void main(String[] args) throws Exception {
+
+            // 1. Obtener la fábrica de sockets SSL para crear sockets seguros
+            SSLServerSocketFactory factory = (SSLServerSocketFactory)
+            SSLServerSocketFactory.getDefault();
+            // 2. Crear un servidor seguro que escucha en el puerto 8443
+            // Este puerto es comúnmente utilizado para conexiones HTTPS con SSL/TLS
+            SSLServerSocket serverSocket = (SSLServerSocket) factory.createServerSocket(8443);
+            System.out.println("Servidor seguro en espera de conexiones...");
+            // 3. Esperar la conexión de un cliente y aceptar la conexión entrante
+            SSLSocket socket = (SSLSocket) serverSocket.accept();
+            // 4. Crear un BufferedReader para leer datos enviados por el cliente
+            BufferedReader reader = new BufferedReader(new
+            InputStreamReader(socket.getInputStream()));
+            // 5. Leer el mensaje enviado por el cliente y mostrarlo en consola
+            System.out.println("Mensaje recibido: " + reader.readLine());
+            // 6. Cerrar la conexión con el cliente
+            socket.close();
+            // 7. Cerrar el socket del servidor para liberar el puerto
+            serverSocket.close();
+        }
+    }
 </code>
 </pre>
 
 
 <pre>
 <code>
-<h2>RMICalcServer</h2>
+<h2>SecureClient.java</h2>
+// Importamos las clases necesarias para la comunicación segura con SSL/TLS
+import javax.net.ssl.*; // Proporciona clases para gestionar sockets seguros (SSL/TLS)
+import java.io.*; // Para manejar la entrada y salida de datos
+import java.net.*; // Para el manejo de sockets y conexiones de red
 
-<!--  -->
+public class SecureClient {
+    public static void main(String[] args) throws Exception {
+
+        // 1. Obtener la fábrica de sockets seguros (SSL/TLS)
+        // Esta fábrica se usa para crear sockets que establecen una conexión cifrada
+        SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        // 2. Crear un socket seguro que se conectará al servidor en el puerto 8443
+        SSLSocket socket = (SSLSocket) factory.createSocket("localhost", 8443);
+        // 3. Crear un PrintWriter para enviar datos al servidor a través del socket
+        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+        // 4. Enviar un mensaje al servidor
+        writer.println("Mensaje seguro desde el cliente");
+        // 5. Cerrar la conexión con el servidor
+        socket.close();
+    }
+}
 </code>
 </pre>
+
+<pre>
+    <code>
+    <h2>AccessControlExample.java</h2>
+    // Importamos las clases necesarias para manipular archivos y sus atributos de seguridad
+    import java.nio.file.*; // Proporciona clases para trabajar con rutas y archivos
+    import java.nio.file.attribute.*; // Permite acceder a los atributos de archivos, como permisos y ACL
+    
+    public class AccessControlExample {
+        public static void main(String[] args) throws Exception {
+            
+            // 1. Definir la ruta del archivo cuyo control de acceso queremos consultar
+            Path file = Paths.get("archivo_secreto.txt"); // Ruta relativa al archivo
+            // 2. Obtener la vista de atributos ACL (Access Control List) del archivo
+            // Esto permite acceder y modificar los permisos de seguridad del archivo en sistemas
+            compatibles
+            AclFileAttributeView aclView = Files.getFileAttributeView(file,
+            AclFileAttributeView.class);
+            // 3. Imprimir la lista de permisos de acceso (ACL) del archivo
+            System.out.println("Permisos de acceso: " + aclView.getAcl());
+        }
+    }
+    </code>
+    </pre>
 </div>
 
 </body>
